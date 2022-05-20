@@ -13,7 +13,8 @@ public class graphicalInterface {
     public final int height;
     public final float scaleFactor;
     public Graphics2D g;
-    graphicalInterface(){
+
+    graphicalInterface() {
         //new frame, canvas and panel
         frame = new JFrame("Tower Defense");
         canvas = new Canvas();
@@ -22,7 +23,7 @@ public class graphicalInterface {
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //make it full screen
-        frame.setBounds(0,0,Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height);
+        frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
         frame.setVisible(true);
         frame.setResizable(false);
         canvas.setBounds(frame.getBounds());
@@ -32,43 +33,53 @@ public class graphicalInterface {
         canvas.setIgnoreRepaint(true);
         width = canvas.getWidth();
         height = canvas.getHeight();
-        scaleFactor = ((float)height)/100;
+        scaleFactor = ((float) height) / 100;
         g = (Graphics2D) canvas.getBufferStrategy().getDrawGraphics();
         //get a new graphics2d, g
     }
-    public void graphicTick(){
+
+    public void graphicTick() {
         g = (Graphics2D) canvas.getBufferStrategy().getDrawGraphics();
-        g.clearRect(0, 0,width, height);
+        g.clearRect(0, 0, width, height);
     }
-    public void update(){
+
+    public void update() {
         //advance the canvas a frame
         canvas.getBufferStrategy().show();
         canvas.update(g);
         g.dispose();
         this.graphicTick();
     }
-    public void setColor(Color c){
+
+    public void setColor(Color c) {
         g.setColor(c);
     }
-    public void rect(double x, double y, double x2, double y2){
-        g.fillRect(convertX(x), convertY(y), (int) round((x2-x)*scaleFactor), (int) round(scaleFactor*(y2-y)));
+
+    public void rect(double x, double y, double x2, double y2) {
+        g.fillRect(convertX(x), convertY(y), (int) round((x2 - x) * scaleFactor), (int) round(scaleFactor * (y2 - y)));
     }
-    public void outlineRect(double x, double y, double x2, double y2){
-        g.drawRect(convertX(x), convertY(y), (int) round((x2-x)*scaleFactor), (int) round(scaleFactor*(y2-y)));
+
+    public void outlineRect(double x, double y, double x2, double y2) {
+        g.drawRect(convertX(x), convertY(y), (int) round((x2 - x) * scaleFactor), (int) round(scaleFactor * (y2 - y)));
     }
-    public int convertX(double x){
-        return (int) round((x*scaleFactor));
+
+    public int convertX(double x) {
+        return (int) round((x * scaleFactor));
     }
-    public int convertY(double y){
-        return (int) round((y*scaleFactor));
+
+    public int convertY(double y) {
+        return (int) round((y * scaleFactor));
     }
-    public void circle(double x, double y, double r){
-        g.fillOval(convertX(x-r), convertY(y-r), (int) round(2*r*scaleFactor), (int) round(2*r*scaleFactor));
+
+    public void circle(double x, double y, double r) {
+        g.fillOval(convertX(x - r), convertY(y - r), (int) round(2 * r * scaleFactor), (int) round(2 * r * scaleFactor));
     }
-    public void text(String s, double x, double y){
+
+    public void text(String s, double x, double y) {
         g.drawString(s, convertX(x), convertY(y));
     }
-    public void rotate(double originX, double originY, ArrayList<point> offsets, double h){
+
+    public void rotate(double originX, double originY, ArrayList<point> offsets, double h) {
         for (point offset : offsets) {
             double x1 = offset.x - originX;
             double y1 = offset.y - originY;
@@ -76,10 +87,11 @@ public class graphicalInterface {
             offset.y = x1 * sin(h) + y1 * cos(h) + originY;
         }
     }
-    public void poly(ArrayList<point> points){
+
+    public void poly(ArrayList<point> points) {
         ArrayList<Integer> Xs = new ArrayList<>();
         ArrayList<Integer> Ys = new ArrayList<>();
-        for (point p : points){
+        for (point p : points) {
             Xs.add(convertX(p.x));
             Ys.add(convertY(p.y));
         }

@@ -1,10 +1,9 @@
 package com.company;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class game implements Runnable, KeyListener, MouseListener, MouseMotionListener {
     private final graphicalInterface gui;
@@ -16,7 +15,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     public int kl = 0;
     public int klj = 0;
     public boolean mp;
-    private ArrayList<point> playButton;
+    private final ArrayList<point> playButton;
     public boolean towerCreator = false;
     public int coins = 2000;
     public int my = 0;
@@ -29,27 +28,28 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     public Tile selectedTile = null;
     public final ArrayList<ArrayList<Tile>> tileGrid = new ArrayList<>();
     public static Font f = new Font("f", Font.PLAIN, 25);
-    game(graphicalInterface gu){
+
+    game(graphicalInterface gu) {
         gui = gu;
         playButton = new ArrayList<>(List.of(
-                new point(gui.width/gui.scaleFactor - 5, 92),
-                new point(gui.width/gui.scaleFactor - 1, 95),
-                new point(gui.width/gui.scaleFactor - 5, 98)));
-        play = new Button((int) (gui.width/gui.scaleFactor - 5), 92, (int) (gui.width/gui.scaleFactor - 1), 98, "");
+                new point(gui.width / gui.scaleFactor - 5, 92),
+                new point(gui.width / gui.scaleFactor - 1, 95),
+                new point(gui.width / gui.scaleFactor - 5, 98)));
+        play = new Button((int) (gui.width / gui.scaleFactor - 5), 92, (int) (gui.width / gui.scaleFactor - 1), 98, "");
         gui.canvas.addKeyListener(this);
         gui.canvas.addMouseListener(this);
         gui.canvas.addMouseMotionListener(this);
-        towButtons.add(new Button(120, 30,130,40, "<"));
-        towButtons.add(new Button((int) (gui.width/gui.scaleFactor) - 20, 30, (int) ((gui.width/gui.scaleFactor) - 10),40,">"));
-        towButtons.add(new Button(120, 40,130,50, "<"));
-        towButtons.add(new Button((int) (gui.width/gui.scaleFactor) - 20, 40, (int) ((gui.width/gui.scaleFactor) - 10),50,">"));
-        towButtons.add(new Button(120, 20,130,30,"<"));
-        towButtons.add(new Button((int) (gui.width/gui.scaleFactor) - 20, 20, (int) ((gui.width/gui.scaleFactor) - 10),30,">"));
-        towButtons.add(new Button(120, 60,130,70,""));
+        towButtons.add(new Button(120, 30, 130, 40, "<"));
+        towButtons.add(new Button((int) (gui.width / gui.scaleFactor) - 20, 30, (int) ((gui.width / gui.scaleFactor) - 10), 40, ">"));
+        towButtons.add(new Button(120, 40, 130, 50, "<"));
+        towButtons.add(new Button((int) (gui.width / gui.scaleFactor) - 20, 40, (int) ((gui.width / gui.scaleFactor) - 10), 50, ">"));
+        towButtons.add(new Button(120, 20, 130, 30, "<"));
+        towButtons.add(new Button((int) (gui.width / gui.scaleFactor) - 20, 20, (int) ((gui.width / gui.scaleFactor) - 10), 30, ">"));
+        towButtons.add(new Button(120, 60, 130, 70, ""));
         for (int i = 0; i < 10; i++) {
             ArrayList<Tile> tiles = new ArrayList<>();
             for (int j = 0; j < 10; j++) {
-                tiles.add(new Tile("grass", i*10, j*10));
+                tiles.add(new Tile("grass", i * 10, j * 10));
             }
             tileGrid.add(tiles);
         }
@@ -64,9 +64,9 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     @Override
     public void run() {
         //noinspection InfiniteLoopStatement
-        while(true) {
+        while (true) {
             gui.setColor(Color.BLACK);
-            gui.g.fillRect(gui.height, 0, (gui.width-gui.height), gui.height);
+            gui.g.fillRect(gui.height, 0, (gui.width - gui.height), gui.height);
             for (ArrayList<Tile> tiles : tileGrid) {
                 for (Tile t : tiles) {
                     if (t != selectedTile) {
@@ -74,89 +74,84 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                     }
                 }
             }
-            for (Projectile p : Projectile.projectiles){
+            for (Projectile p : Projectile.projectiles) {
                 if (p.exist) {
                     p.draw(gui, this);
                 }
             }
             Explosion.update(this, gui);
-            if (wave){
-                Enemy.drawEnemies(this,gui);
+            if (wave) {
+                Enemy.drawEnemies(this, gui);
             }
-            if (towerCreator){
+            if (towerCreator) {
                 gui.g.setFont(game.f);
                 gui.setColor(Color.white);
                 gui.text("Tower Creator:       Coins: " + coins, 110, 10);
                 selectedTile.draw(gui, this);
                 cT.draw(gui, this, false);
                 gui.setColor(Main.c1);
-                gui.circle(selectedTile.x+5, selectedTile.y+5, cT.stats.get("Range"));
+                gui.circle(selectedTile.x + 5, selectedTile.y + 5, cT.stats.get("Range"));
                 gui.setColor(Color.white);
-                gui.text(cT.base,140,35);
-                gui.text(cT.gunType,140,25);
-                gui.text(cT.projectileType, 135,45);
-                gui.text(String.valueOf(cT.cost()), 130,65);
+                gui.text(cT.base, 140, 35);
+                gui.text(cT.gunType, 140, 25);
+                gui.text(cT.projectileType, 135, 45);
+                gui.text(String.valueOf(cT.cost()), 130, 65);
                 for (int i = 0; i < cT.stats.size(); i++) {
-                    gui.text(""+ cT.stats.entrySet().toArray()[i], gui.width/gui.scaleFactor - 25, 60 + i*5);
+                    gui.text("" + cT.stats.entrySet().toArray()[i], gui.width / gui.scaleFactor - 25, 60 + i * 5);
                 }
-                for (Button b : towButtons){
-                    if (b.draw(gui, mx, my, mp)){
+                for (Button b : towButtons) {
+                    if (b.draw(gui, mx, my, mp)) {
                         mp = false;
-                        if (b.y == 30){
-                            if (Objects.equals(b.text, "<")){
+                        if (b.y == 30) {
+                            if (Objects.equals(b.text, "<")) {
                                 kl -= 1;
-                                if (kl < 0){
-                                    kl = Tower.bases.size()-1;
+                                if (kl < 0) {
+                                    kl = Tower.bases.size() - 1;
                                 }
                                 cT.base = Tower.bases.get(kl);
                                 cT.computeStats(gui, false);
-                            }
-                            else{
+                            } else {
                                 kl += 1;
-                                if (kl >= Tower.bases.size()){
+                                if (kl >= Tower.bases.size()) {
                                     kl = 0;
                                 }
                                 cT.base = Tower.bases.get(kl);
                                 cT.computeStats(gui, false);
                             }
                         }
-                        if (b.y == 40){
-                            if (Objects.equals(b.text, "<")){
+                        if (b.y == 40) {
+                            if (Objects.equals(b.text, "<")) {
                                 klj -= 1;
-                                if (klj < 0){
-                                    klj = Projectile.colorTypes.keySet().toArray().length-1;
+                                if (klj < 0) {
+                                    klj = Projectile.colorTypes.keySet().toArray().length - 1;
                                 }
                                 cT.projectileType = (String) Projectile.colorTypes.keySet().toArray()[klj];
                                 cT.computeStats(gui, false);
-                            }
-                            else{
+                            } else {
                                 klj += 1;
-                                if (klj >= Projectile.colorTypes.keySet().toArray().length){
+                                if (klj >= Projectile.colorTypes.keySet().toArray().length) {
                                     klj = 0;
                                 }
                                 cT.projectileType = (String) Projectile.colorTypes.keySet().toArray()[klj];
                                 cT.computeStats(gui, false);
                             }
-                        }
-                        else if (b.y == 20){
-                            if (Objects.equals(b.text, "<")){
+                        } else if (b.y == 20) {
+                            if (Objects.equals(b.text, "<")) {
                                 lk -= 1;
-                                if (lk < 0){
-                                    lk = Tower.gunPolys.size()-1;
+                                if (lk < 0) {
+                                    lk = Tower.gunPolys.size() - 1;
                                 }
                                 cT.gunType = (String) Tower.gunPolys.keySet().toArray()[lk];
                                 cT.computeStats(gui, true);
-                            }
-                            else{
+                            } else {
                                 lk += 1;
-                                if (lk >= Tower.gunPolys.size()){
+                                if (lk >= Tower.gunPolys.size()) {
                                     lk = 0;
                                 }
                                 cT.gunType = (String) Tower.gunPolys.keySet().toArray()[lk];
                                 cT.computeStats(gui, true);
                             }
-                        }
-                        else if(b.y == 60 && coins >= cT.cost()){
+                        } else if (b.y == 60 && coins >= cT.cost()) {
                             coins -= cT.cost();
                             selectedTile.hasTower = true;
                             selectedTile.tower = cT.finalized(selectedTile.x, selectedTile.y);
@@ -166,25 +161,24 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                         }
                     }
                 }
-            }
-            else if(selectedTile != null) {
+            } else if (selectedTile != null) {
                 gui.g.setFont(game.f);
                 gui.setColor(Color.white);
                 gui.text("Shop:           Coins: " + coins, 110, 10);
                 selectedTile.draw(gui, this);
-                if (!selectedTile.hasTower){
-                    for (Tile t : shopTiles){
-                        t.draw(gui,this);
+                if (!selectedTile.hasTower) {
+                    for (Tile t : shopTiles) {
+                        t.draw(gui, this);
                         gui.setColor(Color.white);
-                        gui.text(String.valueOf(prices.get(t.type)), t.x+2.5, t.y + 15);
+                        gui.text(String.valueOf(prices.get(t.type)), t.x + 2.5, t.y + 15);
                     }
                     gui.setColor(Color.lightGray);
-                    gui.rect(110, 70, (gui.width)/ gui.scaleFactor - 10, 90);
+                    gui.rect(110, 70, (gui.width) / gui.scaleFactor - 10, 90);
                     gui.setColor(Color.darkGray);
                     gui.text("Build Tower", 130, 80);
                 }
             }
-            if(!wave){
+            if (!wave) {
                 if (crystal != null && portal != null && path != null) {
                     gui.setColor(Main.c3);
                     point p1 = null;
@@ -206,8 +200,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                         Enemy.pUsed = 0;
                     }
                     gui.setColor(Color.green);
-                }
-                else{
+                } else {
                     gui.setColor(Color.red);
                 }
                 gui.poly(playButton);
@@ -240,15 +233,14 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     @Override
     public void mousePressed(MouseEvent e) {
         mp = true;
-        for (ArrayList<Tile> tiles : tileGrid){
-            for (Tile t : tiles){
-                if(t.mouseOver(mx, my)){
-                    if (t == selectedTile && t.hasTower){
+        for (ArrayList<Tile> tiles : tileGrid) {
+            for (Tile t : tiles) {
+                if (t.mouseOver(mx, my)) {
+                    if (t == selectedTile && t.hasTower) {
                         coins += t.tower.cost();
                         t.hasTower = false;
                         t.tower = null;
-                    }
-                    else {
+                    } else {
                         selectedTile = t;
                         towerCreator = false;
                         mp = false;
@@ -256,22 +248,22 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                 }
             }
         }
-        if (selectedTile != null){
-            if(!selectedTile.hasTower && !Objects.equals(selectedTile.type, "portal") && !Objects.equals(selectedTile.type, "crystal") && !wave && !towerCreator){
-                for (Tile t : shopTiles){
-                    if (t.mouseOver(mx, my)){
-                        if(prices.get(t.type)*-1 <= coins && !Objects.equals(selectedTile.type, t.type)){
+        if (selectedTile != null) {
+            if (!selectedTile.hasTower && !Objects.equals(selectedTile.type, "portal") && !Objects.equals(selectedTile.type, "crystal") && !wave && !towerCreator) {
+                for (Tile t : shopTiles) {
+                    if (t.mouseOver(mx, my)) {
+                        if (prices.get(t.type) * -1 <= coins && !Objects.equals(selectedTile.type, t.type)) {
                             coins += prices.get(t.type);
                             selectedTile.type = t.type;
                             mp = false;
-                            if (Objects.equals("portal", t.type)){
-                                if (portal != null){
+                            if (Objects.equals("portal", t.type)) {
+                                if (portal != null) {
                                     portal.type = "grass";
                                 }
                                 portal = selectedTile;
                             }
-                            if (Objects.equals("crystal", t.type)){
-                                if (crystal != null){
+                            if (Objects.equals("crystal", t.type)) {
+                                if (crystal != null) {
                                     crystal.type = "grass";
                                 }
                                 crystal = selectedTile;
@@ -280,7 +272,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                         }
                     }
                 }
-                if (mx <= (gui.width)/ gui.scaleFactor - 10 && mx >= 110 && my >= 70 && my <= 90 && Objects.equals(selectedTile.type, "grass")){
+                if (mx <= (gui.width) / gui.scaleFactor - 10 && mx >= 110 && my >= 70 && my <= 90 && Objects.equals(selectedTile.type, "grass")) {
                     cT = new Tower(120, 60);
                     cT.computeStats(gui, true);
                     towerCreator = true;
@@ -314,50 +306,51 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mx = (int) (e.getX()/gui.scaleFactor);
-        my = (int) (e.getY()/gui.scaleFactor);
+        mx = (int) (e.getX() / gui.scaleFactor);
+        my = (int) (e.getY() / gui.scaleFactor);
     }
-    public void pathFind(){
+
+    public void pathFind() {
         if (portal != null && crystal != null) {
             boolean[][] e = new boolean[10][10];
-            path = pather(new ArrayList<>(), portal.x/10, portal.y/10, e);
+            path = pather(new ArrayList<>(), portal.x / 10, portal.y / 10, e);
         }
     }
+
     // This should be called as little as possible, and at some point should be replaced with a A* search. As of
     // now, it is good enough.
-    private ArrayList<point> pather(ArrayList<point> points, int x, int y, boolean[][] explored){
-        points.add(new point(x*10+5, y*10+5));
+    private ArrayList<point> pather(ArrayList<point> points, int x, int y, boolean[][] explored) {
+        points.add(new point(x * 10 + 5, y * 10 + 5));
         explored[x][y] = true;
         if (tileGrid.get(x).get(y) == crystal) {
             return (points);
-        }
-        else{
+        } else {
             ArrayList<ArrayList<point>> p = new ArrayList<>();
-            if (x != 0){
-                if(!Objects.equals(tileGrid.get(x - 1).get(y).type, "grass") && !explored[x-1][y]) {
+            if (x != 0) {
+                if (!Objects.equals(tileGrid.get(x - 1).get(y).type, "grass") && !explored[x - 1][y]) {
                     p.add(pather((ArrayList<point>) points.clone(), x - 1, y, deepCopy(explored)));
                 }
             }
-            if (x != 9){
-                if(!Objects.equals(tileGrid.get(x + 1).get(y).type, "grass") && !explored[x+1][y]) {
+            if (x != 9) {
+                if (!Objects.equals(tileGrid.get(x + 1).get(y).type, "grass") && !explored[x + 1][y]) {
                     p.add(pather((ArrayList<point>) points.clone(), x + 1, y, deepCopy(explored)));
                 }
             }
-            if (y != 0){
-                if(!Objects.equals(tileGrid.get(x).get(y-1).type, "grass") && !explored[x][y-1]) {
-                    p.add(pather((ArrayList<point>) points.clone(), x, y-1, deepCopy(explored)));
+            if (y != 0) {
+                if (!Objects.equals(tileGrid.get(x).get(y - 1).type, "grass") && !explored[x][y - 1]) {
+                    p.add(pather((ArrayList<point>) points.clone(), x, y - 1, deepCopy(explored)));
                 }
             }
-            if (y != 9){
-                if(!Objects.equals(tileGrid.get(x).get(y+1).type, "grass") && !explored[x][y+1]) {
-                    p.add(pather((ArrayList<point>) points.clone(), x , y+1, deepCopy(explored)));
+            if (y != 9) {
+                if (!Objects.equals(tileGrid.get(x).get(y + 1).type, "grass") && !explored[x][y + 1]) {
+                    p.add(pather((ArrayList<point>) points.clone(), x, y + 1, deepCopy(explored)));
 
                 }
             }
             int len = 1000;
             ArrayList<point> p1 = null;
-            for(ArrayList<point> p2 : p){
-                if(p2 != null) {
+            for (ArrayList<point> p2 : p) {
+                if (p2 != null) {
                     if (p2.size() < len) {
                         p1 = p2;
                         len = p2.size();
@@ -367,6 +360,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
             return p1;
         }
     }
+
     public static boolean[][] deepCopy(boolean[][] original) {
         if (original == null) {
             return null;
