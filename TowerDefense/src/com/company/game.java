@@ -360,6 +360,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                 HashMap<Tile, Tile> explores = new HashMap<>();
                 if (remove.size() == explore.keySet().size()){
                     ended = true;
+                    path = new ArrayList<>();
                 }
                 for (Tile t : explore.keySet()) {
                     if (!remove.contains(t)) {
