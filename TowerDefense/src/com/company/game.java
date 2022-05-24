@@ -244,21 +244,23 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                         pathFind();
                     }
                 }
-            } else if (e.getKeyChar() == 'w' && selectedTile.y != 0) {
-                selectedTile = tileGrid.get(selectedTile.x / 10).get(selectedTile.y / 10 - 1);
-            } else if (e.getKeyChar() == 'a' && selectedTile.x != 0) {
-                selectedTile = tileGrid.get(selectedTile.x / 10 - 1).get(selectedTile.y / 10);
-            } else if (e.getKeyChar() == 'd' && selectedTile.x != 90) {
-                selectedTile = tileGrid.get(selectedTile.x / 10 + 1).get(selectedTile.y / 10);
-            } else if (e.getKeyChar() == 's' && selectedTile.y != 90) {
-                selectedTile = tileGrid.get(selectedTile.x / 10).get(selectedTile.y / 10 + 1);
             }
         }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+        if (selectedTile != null) {
+            if ((e.getKeyChar() == 'w' || e.getKeyCode() == KeyEvent.VK_UP) && selectedTile.y != 0) {
+                selectedTile = tileGrid.get(selectedTile.x / 10).get(selectedTile.y / 10 - 1);
+            } else if ((e.getKeyChar() == 'a'|| e.getKeyCode() == KeyEvent.VK_LEFT) && selectedTile.x != 0) {
+                selectedTile = tileGrid.get(selectedTile.x / 10 - 1).get(selectedTile.y / 10);
+            } else if ((e.getKeyChar() == 'd'|| e.getKeyCode() == KeyEvent.VK_RIGHT) && selectedTile.x != 90) {
+                selectedTile = tileGrid.get(selectedTile.x / 10 + 1).get(selectedTile.y / 10);
+            } else if ((e.getKeyChar() == 's'|| e.getKeyCode() == KeyEvent.VK_DOWN) && selectedTile.y != 90) {
+                selectedTile = tileGrid.get(selectedTile.x / 10).get(selectedTile.y / 10 + 1);
+            }
+        }
     }
 
     @Override
