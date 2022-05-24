@@ -5,11 +5,13 @@ import java.awt.event.*;
 import java.util.List;
 import java.util.*;
 
+
 public class game implements Runnable, KeyListener, MouseListener, MouseMotionListener {
     private final graphicalInterface gui;
     public ArrayList<point> path;
     Tile portal = null;
     Tile crystal = null;
+    public static HashMap<Character, String> types = new HashMap<Character, String>(Map.of('1', "grass", '2', "road", '3', "portal", '4', "crystal"));
     public int mx = 0;
     public int lk = 0;
     public int kl = 0;
@@ -178,6 +180,15 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                     gui.text("Build Tower", 130, 80);
                 }
             }
+            for (Projectile p : Projectile.projectiles) {
+                if (p.exist) {
+                    p.draw(gui, this);
+                }
+            }
+            Explosion.update(this, gui);
+            if (wave) {
+                Enemy.drawEnemies(this, gui);
+            }
             if (!wave) {
                 if (crystal != null && portal != null && path != null) {
                     gui.setColor(Main.c3);
@@ -212,7 +223,37 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        if (selectedTile != null) {
+            if (types.containsKey(e.getKeyChar())) {
+                if (selectedTile.type != "portal" && selectedTile.type != "crystal" && !selectedTile.hasTower) {
+                    if (prices.get(types.get(e.getKeyChar())) * -1 <= coins && !Objects.equals(selectedTile.type, types.get(e.getKeyChar()))) {
+                        coins += prices.get(types.get(e.getKeyChar()));
+                        selectedTile.type = types.get(e.getKeyChar());
+                        if (Objects.equals("portal", types.get(e.getKeyChar()))) {
+                            if (portal != null) {
+                                portal.type = "grass";
+                            }
+                            portal = selectedTile;
+                        }
+                        if (Objects.equals("crystal", types.get(e.getKeyChar()))) {
+                            if (crystal != null) {
+                                crystal.type = "grass";
+                            }
+                            crystal = selectedTile;
+                        }
+                        pathFind();
+                    }
+                }
+            } else if (e.getKeyChar() == 'w' && selectedTile.y != 0) {
+                selectedTile = tileGrid.get(selectedTile.x / 10).get(selectedTile.y / 10 - 1);
+            } else if (e.getKeyChar() == 'a' && selectedTile.x != 0) {
+                selectedTile = tileGrid.get(selectedTile.x / 10 - 1).get(selectedTile.y / 10);
+            } else if (e.getKeyChar() == 'd' && selectedTile.x != 90) {
+                selectedTile = tileGrid.get(selectedTile.x / 10 + 1).get(selectedTile.y / 10);
+            } else if (e.getKeyChar() == 's' && selectedTile.y != 90) {
+                selectedTile = tileGrid.get(selectedTile.x / 10).get(selectedTile.y / 10 + 1);
+            }
+        }
     }
 
     @Override
@@ -312,66 +353,70 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
 
     public void pathFind() {
         if (portal != null && crystal != null) {
-            boolean[][] e = new boolean[10][10];
-            path = pather(new ArrayList<>(), portal.x / 10, portal.y / 10, e);
-        }
-    }
-
-    // This should be called as little as possible, and at some point should be replaced with a A* search. As of
-    // now, it is good enough.
-    private ArrayList<point> pather(ArrayList<point> points, int x, int y, boolean[][] explored) {
-        points.add(new point(x * 10 + 5, y * 10 + 5));
-        explored[x][y] = true;
-        if (tileGrid.get(x).get(y) == crystal) {
-            return (points);
-        } else {
-            ArrayList<ArrayList<point>> p = new ArrayList<>();
-            if (x != 0) {
-                if (!Objects.equals(tileGrid.get(x - 1).get(y).type, "grass") && !explored[x - 1][y]) {
-                    p.add(pather((ArrayList<point>) points.clone(), x - 1, y, deepCopy(explored)));
+            boolean ended = false;
+            HashSet<Tile> remove = new HashSet<>();
+            HashMap<Tile, Tile> explore = new HashMap<>(Map.of(portal, portal));
+            while(!ended) {
+                HashMap<Tile, Tile> explores = new HashMap<>();
+                if (remove.size() == explore.keySet().size()){
+                    ended = true;
                 }
-            }
-            if (x != 9) {
-                if (!Objects.equals(tileGrid.get(x + 1).get(y).type, "grass") && !explored[x + 1][y]) {
-                    p.add(pather((ArrayList<point>) points.clone(), x + 1, y, deepCopy(explored)));
-                }
-            }
-            if (y != 0) {
-                if (!Objects.equals(tileGrid.get(x).get(y - 1).type, "grass") && !explored[x][y - 1]) {
-                    p.add(pather((ArrayList<point>) points.clone(), x, y - 1, deepCopy(explored)));
-                }
-            }
-            if (y != 9) {
-                if (!Objects.equals(tileGrid.get(x).get(y + 1).type, "grass") && !explored[x][y + 1]) {
-                    p.add(pather((ArrayList<point>) points.clone(), x, y + 1, deepCopy(explored)));
-
-                }
-            }
-            int len = 1000;
-            ArrayList<point> p1 = null;
-            for (ArrayList<point> p2 : p) {
-                if (p2 != null) {
-                    if (p2.size() < len) {
-                        p1 = p2;
-                        len = p2.size();
+                for (Tile t : explore.keySet()) {
+                    if (!remove.contains(t)) {
+                        if (t.type == "crystal") {
+                            path = new ArrayList<>();
+                            boolean e = true;
+                            Tile x = t;
+                            while(e){
+                                path.add(new point(x.x + 5, x.y + 5));
+                                if (explore.get(x) == x){
+                                    e = false;
+                                }
+                                else{
+                                    x = explore.get(x);
+                                }
+                            }
+                            Collections.reverse(path);
+                            ended = true;
+                        }
+                        else {
+                            if (t.x != 90) {
+                                if ((Objects.equals(tileGrid.get(t.x / 10 + 1).get(t.y / 10).type, "road") ||
+                                        Objects.equals(tileGrid.get(t.x / 10 + 1).get(t.y / 10).type, "crystal"))
+                                        && !(explore.containsKey(tileGrid.get(t.x / 10 + 1).get(t.y / 10)) || explores.containsKey(tileGrid.get(t.x / 10 + 1).get(t.y / 10)))) {
+                                    explores.put(tileGrid.get(t.x / 10 + 1).get(t.y / 10), t);
+                                }
+                            }
+                            if (t.y != 90) {
+                                if ((Objects.equals(tileGrid.get(t.x / 10).get(t.y / 10 + 1).type, "road") ||
+                                        Objects.equals(tileGrid.get(t.x / 10).get(t.y / 10 + 1).type, "crystal"))
+                                        && !explore.containsKey(tileGrid.get(t.x / 10).get(t.y / 10+1))
+                                        && !explores.containsKey(tileGrid.get(t.x / 10).get(t.y / 10+1))) {
+                                    explores.put(tileGrid.get(t.x / 10).get(t.y / 10 + 1), t);
+                                }
+                            }
+                            if (t.x != 0) {
+                                if ((Objects.equals(tileGrid.get(t.x / 10 - 1).get(t.y / 10).type, "road") ||
+                                        Objects.equals(tileGrid.get(t.x / 10 - 1).get(t.y / 10).type, "crystal"))
+                                        && !explore.containsKey(tileGrid.get(t.x / 10 - 1).get(t.y / 10))
+                                        && !explores.containsKey(tileGrid.get(t.x / 10 - 1).get(t.y / 10))) {
+                                    explores.put(tileGrid.get(t.x / 10 - 1).get(t.y / 10), t);
+                                }
+                            }
+                            if (t.y != 0) {
+                                if ((Objects.equals(tileGrid.get(t.x / 10).get(t.y / 10 - 1).type, "road") ||
+                                        Objects.equals(tileGrid.get(t.x / 10).get(t.y / 10 - 1).type, "crystal"))
+                                        && !explore.containsKey(tileGrid.get(t.x / 10).get(t.y / 10 - 1))
+                                        && !explores.containsKey(tileGrid.get(t.x / 10).get(t.y / 10 - 1))) {
+                                    explores.put(tileGrid.get(t.x / 10).get(t.y / 10 - 1), t);
+                                }
+                            }
+                        }
+                        remove.add(t);
                     }
                 }
+                explore.putAll(explores);
             }
-            return p1;
         }
-    }
-
-    public static boolean[][] deepCopy(boolean[][] original) {
-        if (original == null) {
-            return null;
-        }
-
-        final boolean[][] result = new boolean[original.length][];
-        for (int i = 0; i < original.length; i++) {
-            result[i] = Arrays.copyOf(original[i], original[i].length);
-            // For Java versions prior to Java 6 use the next:
-            // System.arraycopy(original[i], 0, result[i], 0, original[i].length);
-        }
-        return result;
     }
 }
