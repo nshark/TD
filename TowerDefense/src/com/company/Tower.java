@@ -17,72 +17,20 @@ public class Tower {
             "standard", 1d, "fire", -2d, "ice", 0.5d, "artillery", 3d)
     );
     public static Color dg = new Color(0, 125, 0);
+    public static HashMap<String, Color> gunColors = new HashMap<>(Map.of("basic", Color.darkGray, "cannon", Color.orange, "sniper", dg, "buffer", Color.pink, "gatling", Color.darkGray));
     public double y;
+    public Model model = new Model();
     public String projectileType = "standard";
-    static public HashMap<String, ArrayList<point>> gunPolys = new HashMap<>(
-            Map.of("basic",
-                    new ArrayList<>(List.of(
-                            new point(-0.5, -2),
-                            new point(-0.5, -5),
-                            new point(0.5, -5),
-                            new point(0.5, -2),
-                            new point(-2, -2),
-                            new point(-2, 2),
-                            new point(2, 2),
-                            new point(2, -2))),
-                    "buffer",
-                    new ArrayList<>(List.of(
-                            new point(-2, -2),
-                            new point(-2, 2),
-                            new point(2, 2),
-                            new point(2, -2))),
-                    "sniper",
-                    new ArrayList<>(List.of(
-                            new point(-0.25, -2),
-                            new point(-0.25, -5),
-                            new point(0.25, -5),
-                            new point(0.25, -2),
-                            new point(-2, -2),
-                            new point(-2, 2),
-                            new point(2, 2),
-                            new point(2, -2))),
-                    "gatling",
-                    new ArrayList<>(List.of(
-                            new point(-1, -2),
-                            new point(-1, -5),
-                            new point(-0.5, -5),
-                            new point(-0.5, -2),
-                            new point(-0.25, -2),
-                            new point(-0.25, -5),
-                            new point(0.25, -5),
-                            new point(0.25, -2),
-                            new point(0.5, -2),
-                            new point(0.5, -5),
-                            new point(1, -5),
-                            new point(1, -2),
-                            new point(2, -2),
-                            new point(2, 2),
-                            new point(-2, 2),
-                            new point(-2, -2))),
-                    "cannon",
-                    new ArrayList<>(List.of(
-                            new point(-1, -3),
-                            new point(-1, -5),
-                            new point(1, -5),
-                            new point(1, -3),
-                            new point(-3, -3),
-                            new point(-3, 3),
-                            new point(3, 3),
-                            new point(3, -3)))));
     private long lastTimeCalled = System.currentTimeMillis();
     public String base = "plain";
     public String gunType = "basic";
-    private ArrayList<point> toRotate = new ArrayList<>();
     public double h = 0;
+    public ResearchTree tree;
     private long timeTillFire = 0;
     public HashMap<String, Double> stats = new HashMap<>(Map.of("Fire Rate", 100d, "Damage", 1d, "TurnSpd", 0.01d, "BulletV", 0.03, "Range", 10d));
 
     public void computeStats(graphicalInterface gui, Boolean polyChange) {
+        //TODO Read in from file, instead of death wall of ifs
         if (Objects.equals(gunType, "basic")) {
             stats.replace("Fire Rate", 500d);
             stats.replace("Damage", 0.5);
@@ -117,12 +65,8 @@ public class Tower {
             stats.replace("Fire Rate", stats.get("Fire Rate") * 2);
         }
         if (polyChange) {
-            toRotate = new ArrayList<>();
-            h = 0;
-            for (int i = 0; i < gunPolys.get(gunType).size(); i++) {
-                toRotate.add(new point((gunPolys.get(gunType).get(i).x + x + 5), (gunPolys.get(gunType).get(i).y + y + 5)));
-            }
-            gui.rotate(x + 5, y + 5, toRotate, PI / 2);
+            model.setPoints(gunType, x, y);
+            gui.rotate(x + 5, y + 5, model.points, PI / 2);
         }
         if (Objects.equals(base, "plain")) {
             stats.replace("Fire Rate", stats.get("Fire Rate") * 1.2);
@@ -162,30 +106,12 @@ public class Tower {
             gui.setColor(Color.gray);
             gui.circle(x + 5, y + 5, 3);
         }
-        if (Objects.equals(gunType, "basic")) {
-            gui.setColor(Color.darkGray);
-            gui.poly(toRotate);
-        }
-        if (Objects.equals(gunType, "gatling")) {
-            gui.setColor(Color.darkGray);
-            gui.poly(toRotate);
-        }
-
-        if (Objects.equals(gunType, "sniper")) {
-            gui.setColor(dg);
-            gui.poly(toRotate);
-        }
-        if (Objects.equals(gunType, "cannon")) {
-            gui.setColor(Color.ORANGE);
-            gui.poly(toRotate);
-        }
-        if (Objects.equals(gunType, "buffer")) {
-            gui.setColor(Color.MAGENTA);
-            gui.poly(toRotate);
-        }
-        if (showRange && !(gunType == "buffer")) {
+        gui.setColor(gunColors.get(gunType));
+        gui.poly(model.getPoints());
+        if (showRange && !(Objects.equals(gunType, "buffer"))) {
             gui.setColor(Main.c1);
             gui.circle(x + 5, y + 5, stats.get("Range"));
+            tree.draw(game, gui);
         }
         if (timeTillFire > 0) {
             if (buffed >= abs(buffedM) * timeElapsed * 0.1 && buffedM < 0) {
@@ -212,7 +138,7 @@ public class Tower {
                 }
                 if (target != null) {
                     if (abs(atan2(target.y - y - 5, target.x - x - 5) - h) <= (this.stats.get("TurnSpd") * timeElapsed)) {
-                        gui.rotate(x + 5, y + 5, toRotate, atan2(target.y - y - 5, target.x - x - 5) - h);
+                        gui.rotate(x + 5, y + 5, model.points, atan2(target.y - y - 5, target.x - x - 5) - h);
                         h = atan2(target.y - y - 5, target.x - x - 5);
                         if (this.timeTillFire <= 0) {
                             timeTillFire = round(stats.get("Fire Rate"));
@@ -220,13 +146,14 @@ public class Tower {
                         }
                     } else if (atan2(target.y - y - 5, target.x - x - 5) > h) {
                         h += this.stats.get("TurnSpd") * timeElapsed;
-                        gui.rotate(x + 5, y + 5, toRotate, this.stats.get("TurnSpd") * timeElapsed);
+                        gui.rotate(x + 5, y + 5, model.points, this.stats.get("TurnSpd") * timeElapsed);
                     } else {
                         h -= this.stats.get("TurnSpd") * timeElapsed;
-                        gui.rotate(x + 5, y + 5, toRotate, this.stats.get("TurnSpd") * timeElapsed * -1);
+                        gui.rotate(x + 5, y + 5, model.points, this.stats.get("TurnSpd") * timeElapsed * -1);
                     }
                 }
             } else if (game.cT != this) {
+                //TODO generally create method to return a iterable list of adjacent tiles
                 if (!(round(x / 10) == 9)) {
                     if (game.tileGrid.get((int) round(x / 10) + 1).get((int) round(y / 10)).hasTower) {
                         game.tileGrid.get((int) round(x / 10) + 1).get((int) round(y / 10)).tower.buffed += (stats.get("Damage") * timeElapsed) / stats.get("Fire Rate");
@@ -263,6 +190,7 @@ public class Tower {
     public Tower finalized(double x1, double y1) {
         x = x1;
         y = y1;
+        tree = new ResearchTree(gunType, this);
         return this;
     }
 

@@ -141,16 +141,16 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                             if (Objects.equals(b.text, "<")) {
                                 lk -= 1;
                                 if (lk < 0) {
-                                    lk = Tower.gunPolys.size() - 1;
+                                    lk = Model.models.size() - 1;
                                 }
-                                cT.gunType = (String) Tower.gunPolys.keySet().toArray()[lk];
+                                cT.gunType = (String) Model.models.keySet().toArray()[lk];
                                 cT.computeStats(gui, true);
                             } else {
                                 lk += 1;
-                                if (lk >= Tower.gunPolys.size()) {
+                                if (lk >= Model.models.size()) {
                                     lk = 0;
                                 }
-                                cT.gunType = (String) Tower.gunPolys.keySet().toArray()[lk];
+                                cT.gunType = (String) Model.models.keySet().toArray()[lk];
                                 cT.computeStats(gui, true);
                             }
                         } else if (b.y == 60 && coins >= cT.cost()) {

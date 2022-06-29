@@ -74,7 +74,9 @@ public class graphicalInterface {
     public void circle(double x, double y, double r) {
         g.fillOval(convertX(x - r), convertY(y - r), (int) round(2 * r * scaleFactor), (int) round(2 * r * scaleFactor));
     }
-
+    public void outlineCircle(double x, double y, double r) {
+        g.drawOval(convertX(x - r), convertY(y - r), (int) round(2 * r * scaleFactor), (int) round(2 * r * scaleFactor));
+    }
     public void text(String s, double x, double y) {
         g.drawString(s, convertX(x), convertY(y));
     }
@@ -96,5 +98,8 @@ public class graphicalInterface {
             Ys.add(convertY(p.y));
         }
         g.fillPolygon(Xs.stream().mapToInt(i -> i).toArray(), Ys.stream().mapToInt(i -> i).toArray(), points.size());
+    }
+    public void line(double x1, double y1, double x2, double y2){
+        g.drawLine(convertX(x1), convertY(y1), convertX(x2), convertY(y2));
     }
 }
