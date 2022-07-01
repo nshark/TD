@@ -122,7 +122,7 @@ public class Tower {
             }
         }
         if (game.wave) {
-            if (gunType != "buffer") {
+            if (!Objects.equals(gunType, "buffer")) {
                 point target = null;
                 Enemy e1 = null;
                 for (Enemy e : Enemy.enemies) {

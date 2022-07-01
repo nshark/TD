@@ -22,15 +22,16 @@ public class Button {
     }
 
     public boolean draw(graphicalInterface gui, int mouseX, int mouseY, boolean mp) {
+        gui.setColor(Color.white);
         boolean t = false;
         if (mouseX < hx && mouseX > x && mouseY < hy && mouseY > y) {
+            gui.setColor(Color.gray);
             if (mp) {
                 t = true;
             }
         }
-        gui.setColor(Color.white);
         gui.g.setFont(game.f);
-        gui.text(text, x + width / 2, y + height / 2);
+        gui.text(text, x + (width >> 1), y + (height >> 1));
         return t;
     }
 }

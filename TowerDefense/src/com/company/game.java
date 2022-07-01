@@ -11,7 +11,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     public ArrayList<point> path;
     Tile portal = null;
     Tile crystal = null;
-    public static HashMap<Character, String> types = new HashMap<Character, String>(Map.of('1', "grass", '2', "road", '3', "portal", '4', "crystal"));
+    public static HashMap<Character, String> types = new HashMap<>(Map.of('1', "grass", '2', "road", '3', "portal", '4', "crystal"));
     public int mx = 0;
     public int lk = 0;
     public int kl = 0;
@@ -30,7 +30,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     public Tile selectedTile = null;
     public final ArrayList<ArrayList<Tile>> tileGrid = new ArrayList<>();
     public static Font f = new Font("f", Font.PLAIN, 25);
-
+    public Button quitButton;
     game(graphicalInterface gu) {
         gui = gu;
         playButton = new ArrayList<>(List.of(
@@ -38,6 +38,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                 new point(gui.width / gui.scaleFactor - 1, 95),
                 new point(gui.width / gui.scaleFactor - 5, 98)));
         play = new Button((int) (gui.width / gui.scaleFactor - 5), 92, (int) (gui.width / gui.scaleFactor - 1), 98, "");
+        quitButton = new Button((int) (gui.width / gui.scaleFactor - 15), 5, (int) (gui.width / gui.scaleFactor - 5), 15, "quit");
         gui.canvas.addKeyListener(this);
         gui.canvas.addMouseListener(this);
         gui.canvas.addMouseMotionListener(this);
@@ -59,16 +60,14 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
         shopTiles.add(new Tile("road", 135, 20));
         shopTiles.add(new Tile("portal", 120, 40));
         shopTiles.add(new Tile("crystal", 135, 40));
-        new Thread(this).start();
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
     @Override
     public void run() {
-        //noinspection InfiniteLoopStatement
-        while (true) {
+        boolean notQuit = true;
+        while (notQuit) {
             gui.setColor(Color.BLACK);
-            gui.g.fillRect(gui.height, 0, (gui.width - gui.height), gui.height);
+            gui.g.fillRect(gui.convertX(100), 0, (gui.width - gui.height), gui.height);
             for (ArrayList<Tile> tiles : tileGrid) {
                 for (Tile t : tiles) {
                     if (t != selectedTile) {
@@ -110,16 +109,14 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                                 if (kl < 0) {
                                     kl = Tower.bases.size() - 1;
                                 }
-                                cT.base = Tower.bases.get(kl);
-                                cT.computeStats(gui, false);
                             } else {
                                 kl += 1;
                                 if (kl >= Tower.bases.size()) {
                                     kl = 0;
                                 }
-                                cT.base = Tower.bases.get(kl);
-                                cT.computeStats(gui, false);
                             }
+                            cT.base = Tower.bases.get(kl);
+                            cT.computeStats(gui, false);
                         }
                         if (b.y == 40) {
                             if (Objects.equals(b.text, "<")) {
@@ -127,32 +124,28 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                                 if (klj < 0) {
                                     klj = Projectile.colorTypes.keySet().toArray().length - 1;
                                 }
-                                cT.projectileType = (String) Projectile.colorTypes.keySet().toArray()[klj];
-                                cT.computeStats(gui, false);
                             } else {
                                 klj += 1;
                                 if (klj >= Projectile.colorTypes.keySet().toArray().length) {
                                     klj = 0;
                                 }
-                                cT.projectileType = (String) Projectile.colorTypes.keySet().toArray()[klj];
-                                cT.computeStats(gui, false);
                             }
+                            cT.projectileType = (String) Projectile.colorTypes.keySet().toArray()[klj];
+                            cT.computeStats(gui, false);
                         } else if (b.y == 20) {
                             if (Objects.equals(b.text, "<")) {
                                 lk -= 1;
                                 if (lk < 0) {
                                     lk = Model.models.size() - 1;
                                 }
-                                cT.gunType = (String) Model.models.keySet().toArray()[lk];
-                                cT.computeStats(gui, true);
                             } else {
                                 lk += 1;
                                 if (lk >= Model.models.size()) {
                                     lk = 0;
                                 }
-                                cT.gunType = (String) Model.models.keySet().toArray()[lk];
-                                cT.computeStats(gui, true);
                             }
+                            cT.gunType = (String) Model.models.keySet().toArray()[lk];
+                            cT.computeStats(gui, true);
                         } else if (b.y == 60 && coins >= cT.cost()) {
                             coins -= cT.cost();
                             selectedTile.hasTower = true;
@@ -194,16 +187,14 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                     gui.setColor(Main.c3);
                     point p1 = null;
                     for (point p : path) {
-                        if (p1 == null) {
-                            p1 = p;
-                        } else {
+                        if (p1 != null) {
                             if (p1.x > p.x || p1.y > p.y) {
                                 gui.rect(p.x - 1, p.y - 1, p1.x + 1, p1.y + 1);
                             } else {
                                 gui.rect(p1.x - 1, p1.y - 1, p.x + 1, p.y + 1);
                             }
-                            p1 = p;
                         }
+                        p1 = p;
                     }
                     if (play.draw(gui, mx, my, mp) && !wave) {
                         wave = true;
@@ -216,16 +207,18 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                 }
                 gui.poly(playButton);
             }
+            notQuit = !quitButton.draw(gui, mx, my, mp);
             gui.update();
             gui.g.setFont(f);
         }
+        gui.frame.dispatchEvent(new WindowEvent(gui.frame, WindowEvent.WINDOW_CLOSING));
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         if (selectedTile != null) {
             if (types.containsKey(e.getKeyChar())) {
-                if (selectedTile.type != "portal" && selectedTile.type != "crystal" && !selectedTile.hasTower) {
+                if (!Objects.equals(selectedTile.type, "portal") && !Objects.equals(selectedTile.type, "crystal") && !selectedTile.hasTower) {
                     if (prices.get(types.get(e.getKeyChar())) * -1 <= coins && !Objects.equals(selectedTile.type, types.get(e.getKeyChar()))) {
                         coins += prices.get(types.get(e.getKeyChar()));
                         selectedTile.type = types.get(e.getKeyChar());
@@ -366,7 +359,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                 }
                 for (Tile t : explore.keySet()) {
                     if (!remove.contains(t)) {
-                        if (t.type == "crystal") {
+                        if (Objects.equals(t.type, "crystal")) {
                             path = new ArrayList<>();
                             boolean e = true;
                             Tile x = t;
