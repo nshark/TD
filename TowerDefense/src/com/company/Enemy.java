@@ -8,11 +8,11 @@ import static java.lang.Math.abs;
 import static java.lang.Math.round;
 
 public class Enemy {
-    static public ArrayList<Enemy> enemies = new ArrayList<>();
-    static public Font f1 = new Font("p", Font.PLAIN, 10);
-    static public Random r = new Random();
+    static public final ArrayList<Enemy> enemies = new ArrayList<>();
+    static public final Font f1 = new Font("p", Font.PLAIN, 10);
+    static public final Random r = new Random();
     public boolean exist = false;
-    public double DmgOtime = 0;
+    public double DmgOverTime = 0;
     static int pForWave = 0;
     static int pUsed = 0;
     public double x = 0;
@@ -23,17 +23,17 @@ public class Enemy {
     public double power = 1;
     public static long lSpawn = System.currentTimeMillis();
 
-    static void spawn(double Tpower, game game) {
+    static void spawn(double PowerToSpawn, game game) {
         for (Enemy e : enemies) {
             if (!e.exist) {
-                e.power = Tpower;
+                e.power = PowerToSpawn;
                 e.x = game.path.get(0).x;
                 e.y = game.path.get(0).y;
                 e.exist = true;
-                e.DmgOtime = 0;
+                e.DmgOverTime = 0;
                 e.placePath = 0;
                 e.mSpeed = 1;
-                pUsed += Tpower;
+                pUsed += PowerToSpawn;
                 lSpawn = System.currentTimeMillis();
                 return;
             }
@@ -42,11 +42,11 @@ public class Enemy {
         e.exist = true;
         e.x = game.path.get(0).x;
         e.y = game.path.get(0).y;
-        e.power = Tpower;
+        e.power = PowerToSpawn;
         enemies.add(e);
         e.mSpeed = 1;
         lSpawn = System.currentTimeMillis();
-        pUsed += Tpower;
+        pUsed += PowerToSpawn;
     }
 
     static void drawEnemies(game game, graphicalInterface gui) {
@@ -78,13 +78,13 @@ public class Enemy {
             mSpeed += timePassed*(1 - mSpeed)/1000;
         }
         lastUpdate = System.currentTimeMillis();
-        power -= timePassed * 0.005 * DmgOtime;
-        DmgOtime -= timePassed * 0.005 * DmgOtime;
+        power -= timePassed * 0.005 * DmgOverTime;
+        DmgOverTime -= timePassed * 0.005 * DmgOverTime;
         if (power <= 0) {
             this.exist = false;
         }
-        if (DmgOtime < 0) {
-            DmgOtime = 0;
+        if (DmgOverTime < 0) {
+            DmgOverTime = 0;
         }
         if (game.path.get(placePath + 1).x - 0.01 <= this.x && game.path.get(placePath + 1).y - 0.01 <= this.y &&
                 game.path.get(placePath + 1).x + 0.01 >= this.x && game.path.get(placePath + 1).y + 0.01 >= this.y) {

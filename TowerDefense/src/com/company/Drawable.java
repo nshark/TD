@@ -1,5 +1,5 @@
 package com.company;
 
 public interface Drawable {
-    void draw(graphicalInterface gui, game game);
+    // --Commented out by Inspection (7/16/22, 11:00 AM):void draw(graphicalInterface gui, game game);
 }

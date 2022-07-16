@@ -11,7 +11,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     public ArrayList<point> path;
     Tile portal = null;
     Tile crystal = null;
-    public static HashMap<Character, String> types = new HashMap<>(Map.of('1', "grass", '2', "road", '3', "portal", '4', "crystal"));
+    public static final HashMap<Character, String> types = new HashMap<>(Map.of('1', "grass", '2', "road", '3', "portal", '4', "crystal"));
     public int mx = 0;
     public int lk = 0;
     public int kl = 0;
@@ -21,16 +21,16 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
     public boolean towerCreator = false;
     public int coins = 2000;
     public int my = 0;
-    public Button play;
+    public final Button play;
     public Tower cT = null;
-    public ArrayList<Button> towButtons = new ArrayList<>();
-    public HashMap<String, Integer> prices = new HashMap<>(Map.of("grass", 10, "road", -10, "portal", 0, "crystal", 0));
+    public final ArrayList<Button> towButtons = new ArrayList<>();
+    public final HashMap<String, Integer> prices = new HashMap<>(Map.of("grass", 10, "road", -10, "portal", 0, "crystal", 0));
     public boolean wave = false;
-    public ArrayList<Tile> shopTiles = new ArrayList<>();
+    public final ArrayList<Tile> shopTiles = new ArrayList<>();
     public Tile selectedTile = null;
     public final ArrayList<ArrayList<Tile>> tileGrid = new ArrayList<>();
-    public static Font f = new Font("f", Font.PLAIN, 25);
-    public Button quitButton;
+    public static final Font f = new Font("f", Font.PLAIN, 25);
+    public final Button quitButton;
     game(graphicalInterface gu) {
         gui = gu;
         playButton = new ArrayList<>(List.of(
@@ -309,7 +309,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                     }
                 }
                 if (mx <= (gui.width) / gui.scaleFactor - 10 && mx >= 110 && my >= 70 && my <= 90 && Objects.equals(selectedTile.type, "grass")) {
-                    cT = new Tower(120, 60);
+                    cT = new Tower();
                     cT.computeStats(gui, true);
                     towerCreator = true;
                     kl = 0;

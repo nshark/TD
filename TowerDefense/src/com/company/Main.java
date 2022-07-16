@@ -3,8 +3,8 @@ package com.company;
 import java.awt.*;
 
 public class Main {
-    public static Color c1 = new Color(128, 128, 128, 100);
-    public static Color c3 = new Color(255, 255, 255, 200);
+    public static final Color c1 = new Color(128, 128, 128, 100);
+    public static final Color c3 = new Color(255, 255, 255, 200);
 
     public static void main(String[] args) {
         //setup graphics

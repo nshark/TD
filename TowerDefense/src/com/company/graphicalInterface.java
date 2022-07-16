@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import static java.lang.Math.*;
 
 public class graphicalInterface {
-    public JFrame frame;
-    public Canvas canvas;
+    public final JFrame frame;
+    public final Canvas canvas;
     public final int width;
     public final int height;
     public final float scaleFactor;

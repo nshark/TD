@@ -9,19 +9,19 @@ import java.util.*;
 import static java.lang.Math.*;
 
 public class Tower {
-    static public ArrayList<String> bases = new ArrayList<>(List.of(
+    static public final ArrayList<String> bases = new ArrayList<>(List.of(
             "plain", "raised", "spin"
     ));
     public double x;
     public double buffed = 0;
     public double buffedM = 1;
-    public static HashMap<String, Double> bAmmoMods = new HashMap<>(Map.of(
+    public static final HashMap<String, Double> bAmmoMods = new HashMap<>(Map.of(
             "standard", 1d, "fire", -2d, "ice", 0.5d, "artillery", 3d)
     );
-    public static Color dg = new Color(0, 125, 0);
-    public static HashMap<String, Color> gunColors = new HashMap<>(Map.of("basic", Color.darkGray, "cannon", Color.orange, "sniper", dg, "buffer", Color.pink, "gatling", Color.darkGray));
+    public static final Color dg = new Color(0, 125, 0);
+    public static final HashMap<String, Color> gunColors = new HashMap<>(Map.of("basic", Color.darkGray, "cannon", Color.orange, "sniper", dg, "buffer", Color.pink, "gatling", Color.darkGray));
     public double y;
-    public Model model = new Model();
+    public final Model model = new Model();
     public String projectileType = "standard";
     private long lastTimeCalled = System.currentTimeMillis();
     public String base = "plain";
@@ -29,7 +29,7 @@ public class Tower {
     public double h = 0;
     public ResearchTree tree;
     private long timeTillFire = 0;
-    public HashMap<String, Double> stats = new HashMap<>(Map.of("Fire Rate", 100d, "Damage", 1d, "TurnSpd", 0.01d, "BulletV", 0.03, "Range", 10d));
+    public final HashMap<String, Double> stats = new HashMap<>(Map.of("Fire Rate", 100d, "Damage", 1d, "TurnSpd", 0.01d, "BulletV", 0.03, "Range", 10d));
 
     public void computeStats(graphicalInterface gui, Boolean polyChange) {
         //TODO Read in from file, instead of death wall of ifs
@@ -173,9 +173,9 @@ public class Tower {
         }
     }
 
-    Tower(double x1, double y1) {
-        x = x1;
-        y = y1;
+    Tower() {
+        x = 120;
+        y = 60;
     }
 
     public Tower finalized(double x1, double y1) {

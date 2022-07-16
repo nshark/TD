@@ -13,7 +13,7 @@ public class Projectile {
     double dy;
     double x;
     double y;
-    static HashMap<String, Color> colorTypes = new HashMap<>(Map.of(
+    static final HashMap<String, Color> colorTypes = new HashMap<>(Map.of(
             "fire", Color.red,
             "ice", Color.blue,
             "standard", Color.gray,
@@ -22,7 +22,7 @@ public class Projectile {
     String type;
     Tower tower;
     boolean exist = true;
-    static public ArrayList<Projectile> projectiles = new ArrayList<>();
+    static public final ArrayList<Projectile> projectiles = new ArrayList<>();
 
     static public void shoot(Tower tower, String type) {
         for (Projectile p : projectiles) {
@@ -74,7 +74,7 @@ public class Projectile {
                     }
                     if (Objects.equals(type, "fire")) {
                         e.power -= tower.stats.get("Damage") * 0.5 * m;
-                        e.DmgOtime += tower.stats.get("Damage") * 0.75 * m;
+                        e.DmgOverTime += tower.stats.get("Damage") * 0.75 * m;
                     }
                     if (Objects.equals(type, "ice")) {
                         e.power -= tower.stats.get("Damage") * 0.75 * m;

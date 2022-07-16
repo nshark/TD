@@ -5,8 +5,8 @@ import java.util.Objects;
 
 public class Tile implements Drawable, Clickable {
     public String type;
-    public int x;
-    public int y;
+    public final int x;
+    public final int y;
     public boolean hasTower = false;
     public Tower tower = null;
 
@@ -15,8 +15,6 @@ public class Tile implements Drawable, Clickable {
         x = x1;
         y = y1;
     }
-
-    @Override
     public void draw(graphicalInterface gui, game game) {
         if (Objects.equals(type, "road")) {
             gui.setColor(Color.darkGray);
@@ -46,8 +44,6 @@ public class Tile implements Drawable, Clickable {
             tower.draw(gui, game, game.selectedTile == this);
         }
     }
-
-    @Override
     public boolean mouseOver(int mx, int my) {
         return mx >= x && my >= y && mx <= x + 10 && my <= y + 10;
     }

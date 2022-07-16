@@ -5,9 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class ResearchTree {
-    public String type;
-    public Tower tower;
-    public ArrayList<ResearchNode> nodes;
+    public final String type;
+    public final Tower tower;
+    public final ArrayList<ResearchNode> nodes;
     ResearchTree(String type, Tower tower){
         this.tower = tower;
         this.type = type;

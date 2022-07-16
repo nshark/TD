@@ -3,13 +3,13 @@ package com.company;
 import java.awt.*;
 
 public class Button {
-    public int x;
-    public int y;
-    public int hx;
-    public int hy;
-    public int width;
-    public int height;
-    public String text;
+    public final int x;
+    public final int y;
+    public final int hx;
+    public final int hy;
+    public final int width;
+    public final int height;
+    public final String text;
 
     Button(int x1, int y1, int x2, int y2, String text1) {
         x = x1;

@@ -5,15 +5,15 @@ import java.awt.*;
 import static java.lang.Math.pow;
 
 public class ResearchNode {
-    public String name;
-    public ResearchNode precede;
-    public ResearchTree parent;
-    public int cost;
-    public String stat;
-    public double effect;
+    public final String name;
+    public final ResearchNode precede;
+    public final ResearchTree parent;
+    public final int cost;
+    public final String stat;
+    public final double effect;
     public boolean upgraded = false;
-    public double x;
-    public double y;
+    public final double x;
+    public final double y;
     ResearchNode(String name, ResearchNode precede, int cost, String stat, double effect, ResearchTree parent, double x, double y){
         this.name = name;
         this.precede = precede;

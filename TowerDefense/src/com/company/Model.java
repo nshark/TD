@@ -8,7 +8,7 @@ import java.util.Map;
 public class Model {
     //TODO Get in from a txt or other load in, instead of writing out.
     // (also, build a secondary app to help with the creation process)
-    public static HashMap<String, ArrayList<point>> models = new HashMap<>(Map.of(
+    public static final HashMap<String, ArrayList<point>> models = new HashMap<>(Map.of(
             "basic",
             new ArrayList<>(List.of(
                             new point(-0.5, -2),
@@ -72,9 +72,9 @@ public class Model {
         return points;
     }
 
-    public void setPoints(String guntype, double x, double y) {
+    public void setPoints(String gunType, double x, double y) {
         points = new ArrayList<>();
-        for (point p : models.get(guntype)){
+        for (point p : models.get(gunType)){
             points.add(new point(p.x + x + 5, p.y + y + 5));
         }
     }

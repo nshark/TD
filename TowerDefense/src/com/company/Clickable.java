@@ -1,5 +1,5 @@
 package com.company;
 
 public interface Clickable {
-    boolean mouseOver(int mx, int my);
+    // --Commented out by Inspection (7/16/22, 11:00 AM):boolean mouseOver(int mx, int my);
 }
