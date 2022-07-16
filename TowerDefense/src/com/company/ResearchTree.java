@@ -7,22 +7,11 @@ import java.util.*;
 public class ResearchTree {
     public String type;
     public Tower tower;
-    public ArrayList<ResearchNode> nodes = new ArrayList<>();
+    public ArrayList<ResearchNode> nodes;
     ResearchTree(String type, Tower tower){
         this.tower = tower;
         this.type = type;
-        if (Objects.equals(type, "basic")){
-            nodes = readInTree(type, this);
-        }
-        if (Objects.equals(type, "cannon")){
-            nodes.add(new ResearchNode("dmg+",null, 150, "Damage", 1.5, this, 110, 85));
-        }
-        if(Objects.equals(type, "gatling")){
-            nodes.add(new ResearchNode("Range+",null, 150, "Range", 1.5, this, 110, 85));
-        }
-        if (Objects.equals(type, "sniper")){
-            nodes.add(new ResearchNode("dmg+",null, 150, "Damage", 1.5, this, 110, 85));
-        }
+        nodes=readInTree(type, this);
     }
     public void draw(game game, graphicalInterface gui){
         for(ResearchNode r : nodes){
@@ -44,7 +33,6 @@ public class ResearchTree {
                         if (parsed[1].toCharArray()[0] == 'x'){
                             rNodes.add(new ResearchNode(parsed[0], null,
                                     Integer.parseInt(parsed[4]), parsed[5], Double.parseDouble(parsed[6]), rt, Double.parseDouble(parsed[2]), Double.parseDouble(parsed[3])));
-
                         }
                         else {
                             rNodes.add(new ResearchNode(parsed[0], rNodes.get(Integer.parseInt(parsed[1])),

@@ -44,8 +44,8 @@ public class ResearchNode {
         else {
             gui.setColor(Color.yellow);
         }
-        if (pow(x - game.mx, 2) + pow(y - game.my, 2) <= 36){
-            gui.outlineCircle(x, y, 6);
+        if (pow(x - game.mx, 2) + pow(y - game.my, 2) <= 36 && !upgraded){
+            gui.outlineCircle(x, y, 8.5);
             if (precede != null) {
                 if (game.mp && precede.upgraded && game.coins >= cost) {
                     game.mp = false;
@@ -63,7 +63,7 @@ public class ResearchNode {
                 }
             }
         }
-        gui.circle(x,y,5);
+        gui.circle(x,y,7.5);
         gui.setColor(Color.black);
         gui.text(name, x-5, y+1.25);
     }

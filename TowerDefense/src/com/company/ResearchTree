@@ -2,4 +2,16 @@
 :Dmg+-x-110-85-100-Damage-1.5
 :Range+-0-110-65-200-Range-1.5
 :RPM+-0-130-65-300-Fire Rate-0.75
+|gatling
+:Range+-x-110-85-250-Range-1.5
+:Range++-0-110-65-500-Range-1.5
+:Dmg+-0-130-65-750-Damage-1.5
+|sniper
+:Dmg+-x-110-85-200-Damage-1.5
+:RPM+-0-110-65-1000-Fire Rate-0.5
+:Dmg++-0-130-65-500-Damage-1.5
+|cannon
+:Dmg+-x-110-85-150-Damage-1.5
+:RPM+-0-110-65-500-Fire Rate-0.75
+:Dmg++-0-130-65-500-Damage-1.5
 |
