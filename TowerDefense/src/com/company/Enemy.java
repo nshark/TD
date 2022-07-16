@@ -74,6 +74,9 @@ public class Enemy {
 
     public void draw(game game, graphicalInterface gui) {
         long timePassed = System.currentTimeMillis() - lastUpdate;
+        if (mSpeed < 1){
+            mSpeed += timePassed*(1 - mSpeed)/1000;
+        }
         lastUpdate = System.currentTimeMillis();
         power -= timePassed * 0.005 * DmgOtime;
         DmgOtime -= timePassed * 0.005 * DmgOtime;
@@ -113,7 +116,7 @@ public class Enemy {
             gui.circle(x, y, 2);
             gui.setColor(Color.black);
             gui.g.setFont(f1);
-            gui.text(String.valueOf(((double) (round(power * 10))) / 10), x, y);
+            gui.text(String.valueOf(((double) (round(power * 10))) / 10), x-1, y+0.5);
             gui.g.setFont(com.company.game.f);
         }
     }

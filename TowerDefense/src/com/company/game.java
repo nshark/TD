@@ -87,15 +87,15 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
             if (towerCreator) {
                 gui.g.setFont(game.f);
                 gui.setColor(Color.white);
-                gui.text("Tower Creator:       Coins: " + coins, 110, 10);
+                gui.text("Tower Maker: Coins: " + coins, 110, 10);
                 selectedTile.draw(gui, this);
                 cT.draw(gui, this, false);
                 gui.setColor(Main.c1);
                 gui.circle(selectedTile.x + 5, selectedTile.y + 5, cT.stats.get("Range"));
                 gui.setColor(Color.white);
-                gui.text(cT.base, 140, 35);
-                gui.text(cT.gunType, 140, 25);
-                gui.text(cT.projectileType, 135, 45);
+                gui.text(cT.base, 130, 35);
+                gui.text(cT.gunType, 130, 25);
+                gui.text(cT.projectileType, 130, 45);
                 gui.text(String.valueOf(cT.cost()), 130, 65);
                 for (int i = 0; i < cT.stats.size(); i++) {
                     gui.text("" + cT.stats.entrySet().toArray()[i], gui.width / gui.scaleFactor - 25, 60 + i * 5);
