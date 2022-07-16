@@ -1,6 +1,8 @@
 package com.company;
 
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.*;
 
@@ -31,36 +33,8 @@ public class Tower {
 
     public void computeStats(graphicalInterface gui, Boolean polyChange) {
         //TODO Read in from file, instead of death wall of ifs
-        if (Objects.equals(gunType, "basic")) {
-            stats.replace("Fire Rate", 500d);
-            stats.replace("Damage", 0.5);
-            stats.replace("Range", 20d);
-            stats.replace("BulletV", 0.03d);
-        }
-        if (Objects.equals(gunType, "buffer")) {
-            stats.replace("Fire Rate", 500d);
-            stats.replace("Damage", 0.5);
-            stats.replace("Range", 20d);
-            stats.replace("BulletV", 0.03d);
-        }
-        if (Objects.equals(gunType, "gatling")) {
-            stats.replace("Fire Rate", 200d);
-            stats.replace("Damage", 0.1);
-            stats.replace("Range", 15d);
-            stats.replace("BulletV", 0.03d);
-        }
-        if (Objects.equals(gunType, "cannon")) {
-            stats.replace("Fire Rate", 2000d);
-            stats.replace("Damage", 2d);
-            stats.replace("Range", 30d);
-            stats.replace("BulletV", 0.06d);
-        }
-        if (Objects.equals(gunType, "sniper")) {
-            stats.replace("Fire Rate", 5000d);
-            stats.replace("Damage", 4d);
-            stats.replace("Range", 40d);
-            stats.replace("BulletV", 0.1d);
-        }
+        readInStats(gunType, stats);
+        readInStats(base, stats);
         if (Objects.equals(projectileType, "artillery")) {
             stats.replace("Fire Rate", stats.get("Fire Rate") * 2);
         }
@@ -68,25 +42,42 @@ public class Tower {
             model.setPoints(gunType, x, y);
             gui.rotate(x + 5, y + 5, model.points, PI / 2);
         }
-        if (Objects.equals(base, "plain")) {
-            stats.replace("Fire Rate", stats.get("Fire Rate") * 1.2);
-            stats.replace("Damage", stats.get("Damage") * 1.2);
-            stats.replace("TurnSpd", 0.01d);
+    }
+    public static void readInStats(String type, HashMap<String, Double> stats){
+        try{
+            File myObj = new File("TowerDefense/src/com/company/stats");
+            Scanner myReader = new Scanner(myObj);
+            boolean found = false;
+            while(myReader.hasNextLine()){
+                String line = myReader.nextLine();
+                if (line != null) {
+                    if (found) {
+                        if (line.toCharArray()[0] == '|'){
+                            return;
+                        }
+                        else if (line.toCharArray()[0] == ':'){
+                            String[] args = line.split(":")[1].split("-");
+                            if(stats.containsKey(args[0])) {
+                                stats.replace(args[0], Double.parseDouble(args[1]));
+                            }
+                        }
+                        else if (line.toCharArray()[0] == ';'){
+                            String[] args = line.split(";")[1].split("-");
+                            if(stats.containsKey(args[0])) {
+                                stats.replace(args[0], Double.parseDouble(args[1]) * stats.get(args[0]));
+                            }
+                        }
+                    } else if (line.equals("|" + type)) {
+                        found = true;
+                    }
+                }
+            }
+            myReader.close();
         }
-        if (Objects.equals(base, "spin")) {
-            stats.replace("Fire Rate", stats.get("Fire Rate") * 0.9);
-            stats.replace("Damage", stats.get("Damage") * 1);
-            stats.replace("Range", stats.get("Range") * 0.8);
-            stats.replace("TurnSpd", 0.03d);
-        }
-        if (Objects.equals(base, "raised")) {
-            stats.replace("Fire Rate", stats.get("Fire Rate") * 3);
-            stats.replace("Damage", stats.get("Damage") * 1.5);
-            stats.replace("TurnSpd", 0.01d);
-            stats.replace("Range", stats.get("Range") * 2);
+        catch(FileNotFoundException e){
+            e.printStackTrace();
         }
     }
-
     public void draw(graphicalInterface gui, game game, boolean showRange) {
         long timeElapsed = System.currentTimeMillis() - lastTimeCalled;
         lastTimeCalled = System.currentTimeMillis();

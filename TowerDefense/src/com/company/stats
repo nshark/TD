@@ -1,0 +1,39 @@
+|basic
+:Fire Rate-500
+:Damage-0.5
+:Range-20
+:BulletV-0.03
+|gatling
+:Fire Rate-200
+:Damage-0.1
+:Range-15
+:BulletV-0.03
+|cannon
+:Fire Rate-2000
+:Damage-2
+:Range-30
+:BulletV-0.06
+|buffer
+:Fire Rate-500
+:Damage-0.5
+:Range-20
+:BulletV-0.03
+|sniper
+:Fire Rate-5000
+:Damage-4
+:Range-40
+:BulletV-0.1
+|plain
+:TurnSpd-0.03
+;Damage-1.2
+;Fire Rate-1.2
+|spin
+:TurnSpd-0.03
+;Range-0.8
+;Fire Rate-0.9
+|raised
+;Fire Rate-3
+;Damage-1.5
+:TurnSpd-0.01
+;Range-2
+|
