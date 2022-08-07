@@ -43,12 +43,24 @@ public class KeyEventHandler implements KeyListener {
         if (game.getSelectedTile() != null) {
             if ((e.getKeyChar() == 'w' || e.getKeyCode() == KeyEvent.VK_UP) && game.getSelectedTile().y != 0) {
                 game.setSelectedTile(game.getTileGrid().get(game.getSelectedTile().x / 10).get(game.getSelectedTile().y / 10 - 1));
+                if(game.towerCreator){
+                    game.towerCreator = false;
+                }
             } else if ((e.getKeyChar() == 'a' || e.getKeyCode() == KeyEvent.VK_LEFT) && game.getSelectedTile().x != 0) {
                 game.setSelectedTile(game.getTileGrid().get(game.getSelectedTile().x / 10 - 1).get(game.getSelectedTile().y / 10));
+                if(game.towerCreator){
+                    game.towerCreator = false;
+                }
             } else if ((e.getKeyChar() == 'd' || e.getKeyCode() == KeyEvent.VK_RIGHT) && game.getSelectedTile().x != 90) {
                 game.setSelectedTile(game.getTileGrid().get(game.getSelectedTile().x / 10 + 1).get(game.getSelectedTile().y / 10));
+                if(game.towerCreator){
+                    game.towerCreator = false;
+                }
             } else if ((e.getKeyChar() == 's' || e.getKeyCode() == KeyEvent.VK_DOWN) && game.getSelectedTile().y != 90) {
                 game.setSelectedTile(game.getTileGrid().get(game.getSelectedTile().x / 10).get(game.getSelectedTile().y / 10 + 1));
+                if(game.towerCreator){
+                    game.towerCreator = false;
+                }
             }
         }
     }

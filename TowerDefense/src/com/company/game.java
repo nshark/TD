@@ -105,6 +105,7 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
             }
             if (!wave) {
                 drawPath();
+                drawPlayButton();
             }
             notQuit = !quitButton.drawButtonAndReturnTrueIfPressed(gui, mx, my, mp);
             gui.update();

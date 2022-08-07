@@ -65,6 +65,7 @@ public class ResearchNode {
         }
         gui.circle(x,y,7.5);
         gui.setColor(Color.black);
-        gui.text(name, x-5, y+1.25);
+        gui.text(name, x-5, y-1.25);
+        gui.text("Cost: "+cost, x-6,y+1.5);
     }
 }

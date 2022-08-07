@@ -96,6 +96,11 @@ public class Tower {
             gui.setColor(Color.gray);
             gui.circle(x + 5, y + 5, 3);
         }
+        if (buffed >= 1){
+            Color buffedColor = new Color(200,122,122, (int) ((buffed*100d-100)/buffed));
+            gui.setColor(buffedColor);
+            gui.rect(x+1,y+1,x+9,y+9);
+        }
         gui.setColor(gunColors.get(gunType));
         gui.poly(model.getPoints());
         if (showRange && !(Objects.equals(gunType, "buffer"))) {
