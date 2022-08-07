@@ -21,7 +21,7 @@ public class Button {
         height = Math.abs(y - hy);
     }
 
-    public boolean draw(graphicalInterface gui, int mouseX, int mouseY, boolean mp) {
+    public boolean drawButtonAndReturnTrueIfPressed(graphicalInterface gui, int mouseX, int mouseY, boolean mp) {
         gui.setColor(Color.white);
         boolean t = false;
         if (mouseX < hx && mouseX > x && mouseY < hy && mouseY > y) {

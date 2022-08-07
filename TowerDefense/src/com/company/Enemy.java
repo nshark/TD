@@ -6,7 +6,7 @@ import java.util.Random;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.round;
-
+/** Warning - do not create enemy objects outside the spawn method **/
 public class Enemy {
     static public final ArrayList<Enemy> enemies = new ArrayList<>();
     static public final Font f1 = new Font("p", Font.PLAIN, 10);
@@ -22,7 +22,6 @@ public class Enemy {
     public long lastUpdate = System.currentTimeMillis();
     public double power = 1;
     public static long lSpawn = System.currentTimeMillis();
-
     static void spawn(double PowerToSpawn, game game) {
         for (Enemy e : enemies) {
             if (!e.exist) {

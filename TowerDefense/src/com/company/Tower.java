@@ -32,7 +32,6 @@ public class Tower {
     public final HashMap<String, Double> stats = new HashMap<>(Map.of("Fire Rate", 100d, "Damage", 1d, "TurnSpd", 0.01d, "BulletV", 0.03, "Range", 10d));
 
     public void computeStats(graphicalInterface gui, Boolean polyChange) {
-        //TODO Read in from file, instead of death wall of ifs
         readInStats(gunType, stats);
         readInStats(base, stats);
         if (Objects.equals(projectileType, "artillery")) {
