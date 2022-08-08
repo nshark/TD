@@ -4,8 +4,8 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Shop {
-    graphicalInterface gui;
-    game game;
+    final private graphicalInterface gui;
+    final private game game;
     Shop(graphicalInterface gui, game game){
         this.game = game;
         this.gui = gui;

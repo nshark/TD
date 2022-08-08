@@ -7,6 +7,8 @@ public class Main {
     public static final Color c3 = new Color(255, 255, 255, 200);
 
     public static void main(String[] args) {
+        //load in models
+        Model.initModels();
         //setup graphics
         graphicalInterface gui = new graphicalInterface();
         //create a new instance of the game

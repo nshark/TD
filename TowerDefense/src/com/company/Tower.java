@@ -80,6 +80,7 @@ public class Tower {
     public void draw(graphicalInterface gui, game game, boolean showRange) {
         long timeElapsed = System.currentTimeMillis() - lastTimeCalled;
         lastTimeCalled = System.currentTimeMillis();
+        //TODO Make the bases like the turret no death wall of if
         if (Objects.equals(base, "plain")) {
             gui.setColor(Color.white);
             gui.rect(x + 1, y + 1, x + 9, y + 9);
