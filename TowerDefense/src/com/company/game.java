@@ -81,10 +81,10 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
             }
             for (Projectile p : Projectile.projectiles) {
                 if (p.exist) {
-                    p.draw(gui, this);
+                    p.draw(gui);
                 }
             }
-            Explosion.update(this, gui);
+            Explosion.update(gui);
             if (wave) {
                 Enemy.drawEnemies(this, gui);
             }
@@ -96,10 +96,10 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
             }
             for (Projectile p : Projectile.projectiles) {
                 if (p.exist) {
-                    p.draw(gui, this);
+                    p.draw(gui);
                 }
             }
-            Explosion.update(this, gui);
+            Explosion.update(gui);
             if (wave) {
                 Enemy.drawEnemies(this, gui);
             }
@@ -160,7 +160,6 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
 
     @Override
     public void mouseDragged(MouseEvent e) {
-
         mouseEventHandler.mouseDragged(e);
     }
 
@@ -239,9 +238,6 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
         }
     }
 
-    public ArrayList<point> getPlayButton() {
-        return playButton;
-    }
     public void setMp(boolean b){
         mp = b;
     }
@@ -279,18 +275,6 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
         return gui;
     }
 
-    public MouseEventHandler getMouseEventHandler() {
-        return mouseEventHandler;
-    }
-
-    public ArrayList<point> getPath() {
-        return path;
-    }
-
-    public void setPath(ArrayList<point> path) {
-        this.path = path;
-    }
-
     public Tile getPortal() {
         return portal;
     }
@@ -315,32 +299,12 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
         this.mx = mx;
     }
 
-    public int getCounter1() {
-        return counter1;
-    }
-
     public void setCounter1(int counter1) {
         this.counter1 = counter1;
     }
 
-    public int getCounter2() {
-        return counter2;
-    }
-
     public void setCounter2(int counter2) {
         this.counter2 = counter2;
-    }
-
-    public int getCounter3() {
-        return counter3;
-    }
-
-    public void setCounter3(int counter3) {
-        this.counter3 = counter3;
-    }
-
-    public boolean isMp() {
-        return mp;
     }
 
     public boolean isTowerCreator() {
@@ -367,10 +331,6 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
         this.my = my;
     }
 
-    public Button getPlay() {
-        return play;
-    }
-
     public Tower getcT() {
         return cT;
     }
@@ -379,20 +339,12 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
         this.cT = cT;
     }
 
-    public ArrayList<Button> getTowButtons() {
-        return towButtons;
-    }
-
     public HashMap<String, Integer> getPrices() {
         return prices;
     }
 
     public boolean isWave() {
         return wave;
-    }
-
-    public void setWave(boolean wave) {
-        this.wave = wave;
     }
 
     public ArrayList<Tile> getShopTiles() {
@@ -409,10 +361,6 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
 
     public ArrayList<ArrayList<Tile>> getTileGrid() {
         return tileGrid;
-    }
-
-    public Button getQuitButton() {
-        return quitButton;
     }
 
 }

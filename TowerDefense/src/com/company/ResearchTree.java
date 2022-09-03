@@ -5,12 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class ResearchTree {
-    public final String type;
     public final Tower tower;
     public final ArrayList<ResearchNode> nodes;
     ResearchTree(String type, Tower tower){
         this.tower = tower;
-        this.type = type;
         nodes=readInTree(type, this);
     }
     public void draw(game game, graphicalInterface gui){

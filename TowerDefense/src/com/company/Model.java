@@ -1,10 +1,8 @@
 package com.company;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
-import java.util.List;
 
 public class Model {
     //TODO Get in from a txt or other load in, instead of writing out.

@@ -50,7 +50,7 @@ public class Projectile {
         this.tower = tower;
     }
 
-    public void draw(graphicalInterface gui, game game) {
+    public void draw(graphicalInterface gui) {
         int time = (int) (System.currentTimeMillis() - lastCall);
         lastCall = System.currentTimeMillis();
         x += dx * time;

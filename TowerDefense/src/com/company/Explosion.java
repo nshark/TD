@@ -56,7 +56,7 @@ public class Explosion {
         Explosion e = new Explosion(tower, radius, repeat, x, y);
     }
 
-    public void draw(game game, graphicalInterface gui) {
+    public void draw(graphicalInterface gui) {
         long elapsed = System.currentTimeMillis() - lastCalled;
         lastCalled = System.currentTimeMillis();
         if (!maxed) {
@@ -91,10 +91,10 @@ public class Explosion {
         }
     }
 
-    public static void update(game game, graphicalInterface gui) {
+    public static void update(graphicalInterface gui) {
         ArrayList<Explosion> spc = new ArrayList<>();
         for (Explosion e : Explosions) {
-            e.draw(game, gui);
+            e.draw(gui);
             if (e.repeat && !e.maxed) {
                 if (e.cluster()) {
                     spc.add(e);
