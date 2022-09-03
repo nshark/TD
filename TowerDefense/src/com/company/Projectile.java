@@ -46,10 +46,11 @@ public class Projectile {
         dy = tower.stats.get("BulletV") * sin(tower.h);
         x = tower.x + 5;
         y = tower.y + 5;
+        x += cos(tower.h)*5;
+        y += sin(tower.h)*5;
         lastCall = System.currentTimeMillis();
         this.tower = tower;
     }
-
     public void draw(graphicalInterface gui) {
         int time = (int) (System.currentTimeMillis() - lastCall);
         lastCall = System.currentTimeMillis();

@@ -23,7 +23,10 @@ public class graphicalInterface {
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         //make it full screen
+        GraphicsEnvironment ge=GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice vc=ge.getDefaultScreenDevice();
         frame.setBounds(0, 0, Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height);
+        vc.setFullScreenWindow(frame);
         frame.setVisible(true);
         frame.setResizable(false);
         canvas.setBounds(frame.getBounds());
