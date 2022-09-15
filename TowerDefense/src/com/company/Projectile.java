@@ -13,6 +13,7 @@ public class Projectile {
     double dy;
     double x;
     double y;
+    Model points = new Model();
     static final HashMap<String, Color> colorTypes = new HashMap<>(Map.of(
             "fire", Color.red,
             "ice", Color.blue,
@@ -23,31 +24,35 @@ public class Projectile {
     Tower tower;
     boolean exist = true;
     static public final ArrayList<Projectile> projectiles = new ArrayList<>();
-
-    static public void shoot(Tower tower, String type) {
+    static public void shoot(Tower tower, String type, game game) {
         for (Projectile p : projectiles) {
             if (!p.exist) {
-                p.fire(tower);
+                p.fire(tower, game);
                 p.exist = true;
                 p.type = type;
                 return;
             }
         }
-        projectiles.add(new Projectile(tower, type));
+        projectiles.add(new Projectile(tower, type, game));
     }
 
-    Projectile(Tower tower, String type) {
+    Projectile(Tower tower, String type, game game) {
         this.type = type;
-        this.fire(tower);
+        this.fire(tower, game);
     }
-
-    public void fire(Tower tower) {
+    public void fire(Tower tower, game game) {
         dx = tower.stats.get("BulletV") * cos(tower.h);
         dy = tower.stats.get("BulletV") * sin(tower.h);
         x = tower.x + 5;
         y = tower.y + 5;
         x += cos(tower.h)*5;
         y += sin(tower.h)*5;
+        double heading = tower.h;
+        points.points = new ArrayList<>();
+        for (point p : Model.projectile.getPoints()){
+            points.points.add(new point(p.x + x, p.y + y));
+        }
+        game.getGui().rotate(x,y,points.points, heading +Math.PI/2);
         lastCall = System.currentTimeMillis();
         this.tower = tower;
     }
@@ -56,6 +61,10 @@ public class Projectile {
         lastCall = System.currentTimeMillis();
         x += dx * time;
         y += dy * time;
+        for (point p: points.points){
+            p.x += dx*time;
+            p.y += dy*time;
+        }
         if (x > 100 || x < 0 || y > 100 || y < 0) {
             this.exist = false;
         }
@@ -63,10 +72,10 @@ public class Projectile {
             this.exist = false;
         }
         gui.setColor(colorTypes.get(type));
-        gui.circle(x, y, 1);
+        gui.poly(points.points);
         for (Enemy e : Enemy.enemies) {
             if (e.exist) {
-                if (pow(x - e.x, 2) + pow(y - e.y, 2) <= 9d) {
+                if (pow(x - e.x, 2) + pow(y - e.y, 2) <= 2d) {
                     this.exist = false;
                     double m = 1;
                     if (this.tower.buffed >= this.tower.buffedM && this.tower.buffedM > 0) {
@@ -79,7 +88,7 @@ public class Projectile {
                     }
                     if (Objects.equals(type, "ice")) {
                         e.power -= tower.stats.get("Damage") * 0.75 * m;
-                        e.mSpeed = e.mSpeed * 0.75 * m;
+                        e.mSpeed = e.mSpeed * (1.75 - m);
                     }
                     if (Objects.equals(type, "standard")) {
                         e.power -= tower.stats.get("Damage") * m;

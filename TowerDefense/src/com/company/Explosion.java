@@ -34,9 +34,9 @@ public class Explosion {
         for (Enemy e : Enemy.enemies) {
             if (pow((e.x - x), 2) + pow((e.y - y), 2) <= pow(radius, 2)) {
                 if (repeat) {
-                    e.DmgOverTime += tower.stats.get("Damage") * 0.5 * m;
+                    e.DmgOverTime += tower.stats.get("Damage") * 0.4 * m;
                 } else {
-                    e.DmgOverTime += tower.stats.get("Damage") * 0.1 * m;
+                    e.DmgOverTime += tower.stats.get("Damage") * 0.2 * m;
                 }
             }
         }

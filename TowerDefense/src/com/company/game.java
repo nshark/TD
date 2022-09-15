@@ -201,7 +201,8 @@ public class game implements Runnable, KeyListener, MouseListener, MouseMotionLi
                             if (t.x != 90) {
                                 if ((Objects.equals(tileGrid.get(t.x / 10 + 1).get(t.y / 10).type, "road") ||
                                         Objects.equals(tileGrid.get(t.x / 10 + 1).get(t.y / 10).type, "crystal"))
-                                        && !(explore.containsKey(tileGrid.get(t.x / 10 + 1).get(t.y / 10)) || explores.containsKey(tileGrid.get(t.x / 10 + 1).get(t.y / 10)))) {
+                                        && !(explore.containsKey(tileGrid.get(t.x / 10 + 1).get(t.y / 10)) ||
+                                        explores.containsKey(tileGrid.get(t.x / 10 + 1).get(t.y / 10)))) {
                                     explores.put(tileGrid.get(t.x / 10 + 1).get(t.y / 10), t);
                                 }
                             }

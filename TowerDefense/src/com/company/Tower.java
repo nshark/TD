@@ -138,7 +138,7 @@ public class Tower {
                         h = atan2(target.y - y - 5, target.x - x - 5);
                         if (this.timeTillFire <= 0) {
                             timeTillFire = round(stats.get("Fire Rate"));
-                            Projectile.shoot(this, projectileType);
+                            Projectile.shoot(this, projectileType, game);
                         }
                     } else if (atan2(target.y - y - 5, target.x - x - 5) > h) {
                         h += this.stats.get("TurnSpd") * timeElapsed;
